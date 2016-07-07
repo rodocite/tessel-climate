@@ -9,12 +9,12 @@ $ open http://[your ip addres here]:8080/climate (should open a browser and hit 
 ## Data Shape
 ```json
 data: {
-  type: "climate",
-  id: 1467931066913,
-  attributes: {
-      c: 30.8212,
-      f: 87.4782,
-      h: 51.3311
+  "type": "climate",
+  "id": 1467931066913,
+  "attributes": {
+      "c": 30.8212,
+      "f": 87.4782,
+      "h": 51.3311
     }
   }
 }
