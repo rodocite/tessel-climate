@@ -1,20 +1,37 @@
-# Simple Climate API using Tessel2 + Climate Module
+# Simple Climate Server API and Client using Tessel2 + Climate Module
+Run the server and point climate-client.js to the server IP. The Tessel will regularly report back with readings.
+
+### Tessel 2
 ```
 $ npm install
-$ t2 run climate-server.js
-$ t2 push climate-server.js (if you want to have it run on your Tessel untethered)
-$ t2 wifi (find your Tessel's IP)
-$ open http://[your ip addres here]:8080/climate (should open a browser and hit the API for a climate reading)
+$ t2 run climate-client.js
+$ t2 push climate-client.js (if you want to have it run on your Tessel untethered)
 ```
+### Server
+```
+$ brew install postgres
+$ createdb tessel_data (remember to change the user in db.config.js)
+$ npm install
+$ node climate-server.js
+```
+
+
 ## Data Shape
 ```json
-data: {
-  "type": "climate",
-  "id": 1467931066913,
-  "attributes": {
-      "c": 30.8212,
-      "f": 87.4782,
-      "h": 51.3311
+{
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "data": {
+    "type": "temperature",
+    "id": 7,
+    "attributes": {
+      "type": "temperature",
+      "c": 28.0326,
+      "f": 82.4587,
+      "h": 60.5627,
+      "createdAt": "2016-07-08T00:59:56.506Z",
+      "updatedAt": "2016-07-08T00:59:56.506Z"
     }
   }
 }

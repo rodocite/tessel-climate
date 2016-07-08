@@ -1,32 +1,37 @@
-const tessel = require('tessel')
-const climatelib = require('climate-si7020')
 const express = require('express')
 const app = express()
+const sequelize = require('sequelize')
+const bodyParser = require('body-parser')
+const jsonAPISerializer = require('json-api-serializer')
+const Serializer = new jsonAPISerializer()
+const { Temperature } = require('./models')
+const serialize = require('./serialization')
+const request = require('request')
+serialize.register(Serializer)
+app.use(bodyParser.json())
 
-const climate = climatelib.use(tessel.port['A'])
+app.get('/temperature', (req, res) => {
+  Temperature.findAll({})
+  .then(temperatureData => {
+    const data = temperatureData.map(temperature => temperature.dataValues)
 
-climate.on('ready', () => {
-  console.log('Connected to climate module.')
-
-  app.get('/climate', (req, res) => {
-    climate.readTemperature('c', (err, temp) => {
-      climate.readHumidity((err, humid) => {
-        console.log('c:', temp.toFixed(4), 'f:', (temp.toFixed(4) * 1.8 + 32).toFixed(4), 'h:', humid.toFixed(4))
-
-        res.json({
-          data : {
-            type: 'climate',
-            id: Date.now(),
-            attributes: {
-              c: +temp.toFixed(4),
-              f: +(temp.toFixed(4) * 1.8 + 32).toFixed(4),
-              h: +humid.toFixed(4)
-            }
-          }
-        })
-      })
-    })
+    res.json(Serializer.serialize('temperature', data))
   })
 })
 
-app.listen(8080)
+app.post('/temperature', (req, res) => {
+  const attributes = req.body.data.attributes
+
+  Temperature.create({
+    type: 'temperature',
+    c: attributes.c,
+    f: attributes.f,
+    h: attributes.h
+  })
+  .then(temperature => {
+    Temperature.find({ where: { id: temperature.id } })
+    .then(data => res.json(Serializer.serialize('temperature', data.dataValues)))
+  })
+})
+
+app.listen(4000)

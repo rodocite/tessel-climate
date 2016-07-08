@@ -13,8 +13,13 @@
   "license": "MIT",
   "readme": "A bare bones Tessel 2 blinky script.",
   "dependencies": {
+    "body-parser": "^1.15.2",
     "climate-si7020": "^0.1.1",
     "express": "^4.14.0",
+    "json-api-serializer": "^1.0.0",
+    "pg": "^6.0.1",
+    "request": "^2.72.0",
+    "sequelize": "^3.23.4",
     "tessel": "^0.3.24"
   }
 }
