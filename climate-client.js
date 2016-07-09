@@ -28,7 +28,7 @@ climate.on('ready', () => {
           }
         })
 
-        setTimeout(loop, 1000 * 60 * 60)
+        setTimeout(loop, 300000)
       })
     })
   })
